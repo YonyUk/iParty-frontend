@@ -1,9 +1,9 @@
 import z, { ZodObject } from "zod";
-import { ValidationError, ValidationErrorDetail } from "common";
+import { ICommandValidator, ValidationError, ValidationErrorDetail } from "common";
 import { IUsersDomainRulesConfigProvider } from "users-domain";
 import { LoginUserCommand } from "../LoginUserCommand";
 
-export class LoginUserCommandValidator {
+export class LoginUserCommandValidator implements ICommandValidator<LoginUserCommand> {
     private validationSchema: ZodObject;
 
     constructor(
