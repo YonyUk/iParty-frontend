@@ -9,3 +9,6 @@ export * from './lib/errors/InvalidUserNameError';
 export * from './lib/errors/InvalidUserRoleError';
 export * from './lib/errors/UserAlreadyExistsError';
 export * from './lib/errors/UserNotFoundError';
+export * from './lib/configuration/UsersDomainRulesConfigOptions';
+export * from './lib/rules/PasswordDomainRules';
+export * from './lib/rules/UserNameDomainRules';
