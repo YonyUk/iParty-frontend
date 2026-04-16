@@ -3,7 +3,7 @@ export interface IValidationResult{
     get errors():ErrorDetails[] | null;
 }
 
-export interface ErrorDetails{
+export interface IErrorDetails{
     get loc():string;
     get message():string;
 }
