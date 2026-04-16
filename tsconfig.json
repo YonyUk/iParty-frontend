@@ -6,7 +6,8 @@
     "paths": {
       "common": ["./dist/common"],
       "users-application": ["./dist/users-application"],
-      "users-domain": ["./dist/users-domain"]
+      "users-domain": ["./dist/users-domain"],
+      "users-infrastructure": ["./dist/users-infrastructure"]
     },
     "strict": true,
     "noImplicitOverride": true,
@@ -45,6 +46,12 @@
     },
     {
       "path": "./projects/services/users/application/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services/users/infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services/users/infrastructure/tsconfig.spec.json"
     }
   ]
 }
