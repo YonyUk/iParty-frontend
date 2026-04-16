@@ -4,7 +4,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "common": ["./dist/common"]
+      "common": ["./dist/common"],
+      "users-domain": ["./dist/users-domain"]
     },
     "strict": true,
     "noImplicitOverride": true,
@@ -31,6 +32,12 @@
     },
     {
       "path": "./projects/common/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services/users/domain/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services/users/domain/tsconfig.spec.json"
     }
   ]
 }
