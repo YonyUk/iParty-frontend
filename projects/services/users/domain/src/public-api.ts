@@ -20,3 +20,4 @@ export * from './lib/repositories/UserCriteria';
 export * from './lib/value-objects/Email';
 export * from './lib/value-objects/Password';
 export * from './lib/value-objects/UserName';
+export * from './lib/rules/IUsersDomainRulesConfigProvider';
