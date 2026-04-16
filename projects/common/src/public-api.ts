@@ -16,3 +16,5 @@ export * from './lib/application/handlers/ICommandHandler';
 export * from './lib/application/handlers/IQueryHandler';
 export * from './lib/application/handlers/ICommandHandlerAsync';
 export * from './lib/application/handlers/IQueryHandlerAsync';
+export * from './lib/infrastructure/dtos/ProblemDetailsDTO';
+export * from './lib/infrastructure/dtos/ValidationProblemDetailsDTO';
