@@ -1,8 +1,8 @@
-import { Email, Password, UserName, UserRole } from "users-domain";
+import { UserRole } from "users-domain";
 
 export interface RegisterUserDTO{
-    username:UserName;
-    email:Email;
-    password:Password;
+    username:string;
+    email:string;
+    password:string;
     role:UserRole;
 }
