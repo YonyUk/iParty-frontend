@@ -5,6 +5,7 @@
   "compilerOptions": {
     "paths": {
       "common": ["./dist/common"],
+      "users-application": ["./dist/users-application"],
       "users-domain": ["./dist/users-domain"]
     },
     "strict": true,
@@ -38,6 +39,12 @@
     },
     {
       "path": "./projects/services/users/domain/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services/users/application/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services/users/application/tsconfig.spec.json"
     }
   ]
 }
