@@ -1,33 +1,33 @@
 import z, { ZodObject } from "zod";
-import { IValidationResult, ValidationResult,ErrorDetails } from "common";
-import {IUsersDomainRulesConfigProvider} from "users-domain";
+import { ValidationError, ValidationErrorDetail } from "common";
+import { IUsersDomainRulesConfigProvider } from "users-domain";
 import { LoginUserCommand } from "../LoginUserCommand";
 
-export class LoginUserCommandValidator{
-    private validationSchema:ZodObject;
-    
+export class LoginUserCommandValidator {
+    private validationSchema: ZodObject;
+
     constructor(
-        usersDomainRulesConfigProvider:IUsersDomainRulesConfigProvider
-    ){
+        usersDomainRulesConfigProvider: IUsersDomainRulesConfigProvider
+    ) {
         const passworRules = usersDomainRulesConfigProvider.PasswordDomainRules;
         const usernameRules = usersDomainRulesConfigProvider.UserNameDomaiRules;
 
         this.validationSchema = z.object({
-            username:z.string().max(usernameRules.maxLenght).min(usernameRules.minLength)
+            username: z.string().max(usernameRules.maxLenght).min(usernameRules.minLength)
                 .regex(/^w+$/),
-            password:z.string().max(passworRules.maxLength).min(passworRules.minLength)
+            password: z.string().max(passworRules.maxLength).min(passworRules.minLength)
         });
     }
 
-    validate(command:LoginUserCommand):IValidationResult{
+    validate(command: LoginUserCommand): void {
         const result = this.validationSchema.safeParse(command.data);
-        if (result.success){
-            return new ValidationResult(true);
+        if (result.success) {
+            return;
         }
-        const errors = result.error.issues.map( issue => new ErrorDetails(
+        const errors = result.error.issues.map(issue => new ValidationErrorDetail(
             issue.path.join('.'),
             issue.message
         ));
-        return new ValidationResult(false,errors);
+        throw new ValidationError("There is validation errors on login credentials data", errors);
     }
 }
