@@ -1,6 +1,6 @@
 export interface IValidationResult{
     get success():boolean;
-    get errors():ErrorDetails[] | null;
+    get errors():IErrorDetails[] | null;
 }
 
 export interface IErrorDetails{
