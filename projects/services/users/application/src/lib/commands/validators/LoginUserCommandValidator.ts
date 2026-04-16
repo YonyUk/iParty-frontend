@@ -1,5 +1,5 @@
 import z, { ZodObject } from "zod";
-import { IValidationResult, ValidationResult } from "common";
+import { IValidationResult, ValidationResult,ErrorDetails } from "common";
 import {IUsersDomainRulesConfigProvider} from "users-domain";
 import { LoginUserCommand } from "../LoginUserCommand";
 
@@ -24,6 +24,10 @@ export class LoginUserCommandValidator{
         if (result.success){
             return new ValidationResult(true);
         }
-        const errors = new ValidationResult(false);
+        const errors = result.error.issues.map( issue => new ErrorDetails(
+            issue.path.join('.'),
+            issue.message
+        ));
+        return new ValidationResult(false,errors);
     }
 }
