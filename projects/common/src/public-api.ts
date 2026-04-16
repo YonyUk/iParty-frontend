@@ -8,3 +8,7 @@ export * from './lib/errors/NotFoundError';
 export * from './lib/errors/RequiredError';
 export * from './lib/domain/IDomainRule';
 export * from './lib/application/errors/ValidationError';
+export * from './lib/application/validators/ICommandValidator';
+export * from './lib/application/validators/IQueryValidator';
+export * from './lib/application/handlers/ICommandHandler';
+export * from './lib/application/handlers/IQueryHandler';
