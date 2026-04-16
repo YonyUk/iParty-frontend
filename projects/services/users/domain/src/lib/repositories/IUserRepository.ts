@@ -1,0 +1,59 @@
+import { RegisterUserDataDTO } from "../dtos/RegisterUserDataDTO";
+import { User } from "../entities/User";
+import { Email } from "../value-objects/Email";
+import { Password } from "../value-objects/Password";
+import { UserName } from "../value-objects/UserName";
+import { IUserCriteria } from "./UserCriteria";
+
+export interface IUserRepository{
+    /**
+     * 
+     * @param data data of the new user
+     * @returns the id of the just created user
+     */
+    register(data:RegisterUserDataDTO):Promise<string>;
+
+    /**
+     * 
+     * @param id id of the user
+     * @param password the new password value
+     */
+    changePassword(id:string,password:Password):Promise<void>;
+
+    /**
+     * 
+     * @param id id of the user
+     * @returns the user with the given id if exists
+     * @throws UserNotFoundError if the requested user doesn't exists
+     */
+    getById(id:string):Promise<User>;
+
+    /**
+     * 
+     * @param username username of the user
+     * @returns the user with the given username
+     * @throws UserNotFoundError if the requested user doesn't exists
+     */
+    getByName(username:UserName):Promise<User>;
+
+    /**
+     * 
+     * @param email email of the user
+     * @returns the user with the given email
+     * @throws UserNotFoundError if the requested user doesn't exists
+     */
+    getByEmail(email:Email):Promise<User>;
+
+    /**
+     * 
+     * @param criteria criteria to select users
+     */
+    getUsers(criteria:IUserCriteria):Promise<User[]>;
+
+    /**
+     * 
+     * @param id id of the user
+     * @throws UserNotFoundError if the user doesn't exists
+     */
+    delete(id:string):Promise<void>;
+}
