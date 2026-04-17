@@ -8,6 +8,11 @@ export const routes: Routes = [
     },
     {
         path:'users',
+        redirectTo:'users/login',
+        pathMatch:'full'
+    },
+    {
+        path:'users',
         loadChildren:() => import('users-ui').then(m => m.USERS_ROUTES)
     },
     {
