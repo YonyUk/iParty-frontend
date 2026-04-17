@@ -15,10 +15,9 @@ export interface IUserRepository{
 
     /**
      * 
-     * @param id id of the user
      * @param password the new password value
      */
-    changePassword(id:string,password:Password):Promise<void>;
+    changePassword(password:Password):Promise<void>;
 
     /**
      * 
