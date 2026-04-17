@@ -109,6 +109,32 @@
           }
         }
       }
+    },
+    "users-ui": {
+      "projectType": "library",
+      "root": "projects/services/users/UI",
+      "sourceRoot": "projects/services/users/UI/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/services/users/UI/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/services/users/UI/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/services/users/UI/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }

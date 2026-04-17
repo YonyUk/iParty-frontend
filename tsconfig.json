@@ -7,7 +7,8 @@
       "common": ["./dist/common"],
       "users-application": ["./dist/users-application"],
       "users-domain": ["./dist/users-domain"],
-      "users-infrastructure": ["./dist/users-infrastructure"]
+      "users-infrastructure": ["./dist/users-infrastructure"],
+      "users-ui": ["./dist/users-ui"]
     },
     "strict": true,
     "noImplicitOverride": true,
@@ -52,6 +53,12 @@
     },
     {
       "path": "./projects/services/users/infrastructure/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services/users/UI/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services/users/UI/tsconfig.spec.json"
     }
   ]
 }
