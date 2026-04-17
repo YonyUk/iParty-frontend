@@ -122,14 +122,13 @@ export class UserRepository implements IUserRepository {
         }
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(): Promise<void> {
         try {
             await firstValueFrom(
-                this.httpClient.delete(`/${id}`)
+                this.httpClient.delete('me')
             );
         } catch (error) {
-            
+            throw this.ThrowError(error as HttpErrorResponse);
         }
     }
-
 }
