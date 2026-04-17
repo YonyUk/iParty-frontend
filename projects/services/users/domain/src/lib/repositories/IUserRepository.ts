@@ -51,8 +51,7 @@ export interface IUserRepository{
 
     /**
      * 
-     * @param id id of the user
      * @throws UserNotFoundError if the user doesn't exists
      */
-    delete(id:string):Promise<void>;
+    delete():Promise<void>;
 }
