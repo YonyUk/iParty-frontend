@@ -1,4 +1,4 @@
-export class ProblemDetailsDTO extends Error {
+export class ProblemDetailsError extends Error {
 
     constructor(
 
