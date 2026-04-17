@@ -3,4 +3,4 @@
  */
 
 export * from './lib/pages/login/login';
-export * from './lib/users-module/users-routes'
+export * from './lib/routes/users-routes'
