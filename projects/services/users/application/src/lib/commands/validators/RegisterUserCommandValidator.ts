@@ -14,7 +14,7 @@ export class RegisterUserCommandValidator implements ICommandValidator<RegisterU
 
         this.validationSchema = z.object({
             username: z.string().max(usernameRules.maxLenght).min(usernameRules.minLength)
-                .regex(/^w+$/),
+                .regex(/^\w+$/),
             password: z.string().max(passworRules.maxLength).min(passworRules.minLength),
             email: z.email(),
             role: z.enum(UserRole)
