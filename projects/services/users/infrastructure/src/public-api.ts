@@ -3,3 +3,4 @@
  */
 
 export * from './lib/repositories/UserRepository';
+export * from './lib/tokens';
