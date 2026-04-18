@@ -1,0 +1,14 @@
+<div class="page">
+    <form action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <input type="text" formControlName="username" id="username-input" placeholder="username">
+        <input type="email" formControlName="email" id="email-input" placeholder="email">
+        <input type="password" formControlName="password" id="password-input" placeholder="password">
+        <input type="password" formControlName="confirmPassword" id="password-confirm-input" placeholder="confirm">
+    
+        <div class="controls">
+            <button type="submit">
+                register
+            </button>
+        </div>
+    </form>
+</div>
