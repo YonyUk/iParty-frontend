@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import {
     Email,
@@ -15,12 +15,13 @@ import {
 import {
     RegisterUserResponseDTO
 } from "users-application";
-import { ProblemDetailsError, ValidationProblemDetailsError } from "common";
+import { API_HOST_TOKEN, ProblemDetailsError, ValidationProblemDetailsError } from "common";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
 
-    private readonly baseUrl = '/users';
+    private readonly apiHost = inject(API_HOST_TOKEN);
+    private readonly baseUrl = `${this.apiHost}/users`;
 
     constructor(
         private readonly httpClient: HttpClient
