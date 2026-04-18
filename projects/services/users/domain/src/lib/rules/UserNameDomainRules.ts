@@ -24,7 +24,7 @@ export class UserNameDomainRules implements IDomainRule<string> {
         if (value.length < this.minLength || value.length > this.maxLenght) {
             throw new InvalidUserNameError(`value length must be between ${this.minLength} and ${this.maxLenght}`);
         }
-        const pattern = /^[a-zA-Z0-9_]$/;
+        const pattern = /^[a-zA-Z0-9_]+$/;
         if (!pattern.test(value)) {
             throw new InvalidUserNameError("value must only contains alphanumeric and underscore characters");
         }
