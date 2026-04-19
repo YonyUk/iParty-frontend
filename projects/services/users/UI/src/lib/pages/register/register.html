@@ -2,14 +2,24 @@
   <form class="register" action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="selector">
       <div class="icons">
-        @if (accountType == "User") {
-          <ng-icon name="bootstrapPerson" size="60" color="rgba(255,255,255,0.5)"></ng-icon>
-        }
-        @else {
-          <ng-icon name="bootstrapHouses" size="60" color="rgba(255,255,255,0.5)"></ng-icon>
-        }
+          <ng-icon
+          class="icon"
+          name="bootstrapPerson"
+          [class.left-centered]="accountType!=='Host'"
+          [class.moved-left]="accountType==='Host'"
+          size="70"
+          color="rgba(255,255,255,0.5)"></ng-icon>
+          <ng-icon
+          class="icon"
+          name="bootstrapHouses"
+          [class.moved-right]="accountType!=='Host'"
+          [class.right-centered]="accountType==='Host'"
+          size="70"
+          color="rgba(255,255,255,0.5)"></ng-icon>
       </div>
-      <lib-toogle-button></lib-toogle-button>
+      <div class="toogle">
+        <lib-toogle-button (valueChanged)="onAccountTypeChanged($event)"></lib-toogle-button>
+      </div>
     </div>
     @if (error) {
       <div class="error-box">

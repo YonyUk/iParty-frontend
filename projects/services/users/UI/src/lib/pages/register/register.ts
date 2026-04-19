@@ -80,11 +80,11 @@ export class Register {
         username: formValue.username,
         email: formValue.email,
         password: formValue.password,
-        role: UserRole.User,
+        role: this.accountType,
       },
     };
     try {
-      const response = await this.register.handle(command);
+      await this.register.handle(command);
       this.router.navigate(['users', 'login']);
     } catch (error) {
       if (error instanceof UserAlreadyExistsError) {
@@ -97,5 +97,10 @@ export class Register {
 
   cancel() {
     this.location.back();
+  }
+
+  onAccountTypeChanged(value:boolean){
+    this.accountType = value ? UserRole.Host : UserRole.User;
+    console.log(this.accountType);
   }
 }

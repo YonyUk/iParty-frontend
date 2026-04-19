@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -9,10 +9,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class ToogleButton {
 
-  value:boolean = true;
+  value:boolean = false;
+  @Output() valueChanged = new EventEmitter<boolean>();
 
-  print(){
-    console.log(this.value);
+  onChange(value:boolean){
+    this.valueChanged.emit(value);
   }
 
 }
