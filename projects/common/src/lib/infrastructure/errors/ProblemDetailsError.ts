@@ -1,28 +1,26 @@
+import { IProblemDetailsDTO } from "./dtos/IProblemDetailsDTO";
+
 export class ProblemDetailsError extends Error {
 
     constructor(
-
-        private readonly title: string,
-        private readonly status: number,
-        private readonly detail: string,
-        private readonly instance: string
+        private readonly error:IProblemDetailsDTO
     ) { 
-        super(title);
+        super(error.title);
     }
 
     get Title():string{
-        return this.title;
+        return this.error.title;
     }
 
     get Status():number{
-        return this.status;
+        return this.error.status;
     }
 
     get Detail():string{
-        return this.detail;
+        return this.error.detail;
     }
 
     get Instance():string{
-        return this.instance;
+        return this.error.instance;
     }
 }
