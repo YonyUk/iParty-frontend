@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { RegisterUserCommand, RegisterUserCommandHandler } from 'users-application';
 import { provideIUsersDomainRulesConfigProvider, provideRegisterUserCommandHandler, USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN } from 'users-infrastructure';
-import { IUsersDomainRulesConfigProvider, UserRole } from 'users-domain';
-import { email } from 'zod';
+import { UserRole } from 'users-domain';
 
 @Component({
 	selector: 'lib-register',
