@@ -15,7 +15,7 @@ import {
 import {
     RegisterUserResponseDTO
 } from "users-application";
-import { API_HOST_TOKEN, ProblemDetailsError, ValidationProblemDetailsError } from "common";
+import { API_HOST_TOKEN, IProblemDetailsDTO, IValidationProblemDetailsDTO, ProblemDetailsError, ValidationProblemDetailsError } from "common";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -30,15 +30,16 @@ export class UserRepository implements IUserRepository {
     private ThrowError(errorResponse: HttpErrorResponse): Error {
         switch (errorResponse.status) {
             case 409:
-                const conflictError = errorResponse.error as ProblemDetailsError;
-                throw new UserAlreadyExistsError(conflictError.Detail);
+                const conflictError = errorResponse.error as IProblemDetailsDTO;
+                throw new UserAlreadyExistsError(conflictError.detail);
 
             case 400:
-                throw errorResponse.error as ValidationProblemDetailsError;
+                const validationError = errorResponse.error as IValidationProblemDetailsDTO;
+                throw new ValidationProblemDetailsError(validationError);
 
             case 404:
-                const notFoundError = errorResponse.error as ProblemDetailsError;
-                throw new UserNotFoundError(notFoundError.Detail);
+                const notFoundError = errorResponse.error as IProblemDetailsDTO;
+                throw new UserNotFoundError(notFoundError.detail);
 
             default:
                 throw errorResponse;
