@@ -1,7 +1,7 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 80px;
+  width: 70px;
   height: 34px;
 }
 
@@ -42,7 +42,7 @@
 }
 
 input:checked+.slider:before {
-  transform: translateX(44px);
+  transform: translateX(36px);
 }
 
 /* Contenedor de los textos ON y OFF (crossfade) */
@@ -92,7 +92,7 @@ input:checked~.slider .text-off {
 
 /* Ajuste fino de posición de los textos (opcional) */
 .text-on {
-  margin-left: 6px;
+  /* margin-left: 6px; */
   color: rgba(255, 255, 255, 0.5);
 }
 
