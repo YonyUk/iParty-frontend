@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { RegisterUserCommand, RegisterUserCommandHandler } from 'users-application';
 import { provideIUsersDomainRulesConfigProvider, provideRegisterUserCommandHandler, USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN } from 'users-infrastructure';
-import { UserRole } from 'users-domain';
+import { UserAlreadyExistsError, UserRole } from 'users-domain';
+import { Location } from '@angular/common';
+import { ProblemDetailsError, ValidationProblemDetailsError } from 'common';
 
 @Component({
 	selector: 'lib-register',
@@ -20,6 +22,13 @@ export class Register {
 	private register = inject(RegisterUserCommandHandler);
 	private config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
 	private router = inject(Router);
+
+	error:boolean = false;
+	errorMessage:string = '';
+
+	constructor(
+		private readonly location: Location
+	) { }
 
 	form = this.fb.nonNullable.group({
 		username: [
@@ -75,9 +84,17 @@ export class Register {
 		};
 		try {
 			const response = await this.register.handle(command);
-			console.log(response);
+			this.router.navigate(['users','login']);
 		} catch (error) {
-			console.log(error);
+			if (error instanceof UserAlreadyExistsError){
+				this.error = true;
+				this.errorMessage = (error as UserAlreadyExistsError).message;
+				console.log(this.errorMessage);
+			}
 		}
+	}
+
+	cancel() {
+		this.location.back();
 	}
 }
