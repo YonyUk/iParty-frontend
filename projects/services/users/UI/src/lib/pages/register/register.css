@@ -136,3 +136,7 @@
 .right-centered{
   transform: translateX(-35px);
 }
+
+.invalid-field{
+  border-color: red !important;
+}

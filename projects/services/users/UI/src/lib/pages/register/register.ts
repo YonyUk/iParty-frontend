@@ -1,5 +1,5 @@
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { bootstrapHouses,bootstrapPerson } from '@ng-icons/bootstrap-icons';
+import { bootstrapHouses, bootstrapPerson } from '@ng-icons/bootstrap-icons';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import {
 } from 'users-infrastructure';
 import { UserAlreadyExistsError, UserRole } from 'users-domain';
 import { Location } from '@angular/common';
-import { ToogleButton } from "../../components/toogle-button/toogle-button";
+import { ToogleButton } from '../../components/toogle-button/toogle-button';
 
 @Component({
   selector: 'lib-register',
@@ -30,9 +30,16 @@ export class Register {
   private config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
   private router = inject(Router);
 
-  accountType:UserRole = UserRole.User;
+  accountType: UserRole = UserRole.User;
   error: boolean = false;
   errorMessage: string = '';
+
+  usernameRequiredError = false;
+  emailRequiredError = false;
+  passwordRequiredError = false;
+
+  validationErrorMessage?:string;
+  validationErrors = false;
 
   constructor(
     private readonly location: Location,
@@ -69,9 +76,61 @@ export class Register {
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
+  private resetValidationVariables() {
+    this.usernameRequiredError = false;
+    this.emailRequiredError = false;
+    this.passwordRequiredError = false;
+
+    this.validationErrorMessage = undefined;
+    this.validationErrors = false;
+  }
+
+  private processValidationError() {
+    if (this.form.get('username')?.errors?.['required']) {
+      this.usernameRequiredError = true;
+    }
+    if (this.form.get('email')?.errors?.['required']) {
+      this.emailRequiredError = true;
+    }
+    if (this.form.get('password')?.errors?.['required']) {
+      this.passwordRequiredError = true;
+    }
+
+    if (
+      this.form.get('username')?.errors?.['minlength'] ||
+      this.form.get('username')?.errors?.['maxlength']
+    ) {
+      this.validationErrors = true;
+      this.validationErrorMessage = `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}`;
+    } else if (this.form.get('email')?.errors?.['email']) {
+      this.validationErrors = true;
+      this.validationErrorMessage = `Invalid email format`;
+    } else if (
+      this.form.get('password')?.errors?.['minlength'] ||
+      this.form.get('password')?.errors?.['maxlength']
+    ) {
+      this.validationErrors = true;
+      this.validationErrorMessage = `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}`;
+    }
+
+    if (this.form.hasError('passwordMismatch')) {
+      this.validationErrorMessage = "passwords doesn't matches";
+    }
+
+    if (!this.validationErrorMessage &&
+      (this.usernameRequiredError || this.emailRequiredError || this.passwordRequiredError)
+    ){
+      this.validationErrorMessage = 'Please, fill all the required fields';
+    }
+
+    console.log(this.form.get("username")?.errors);
+  }
+
   async onSubmit(): Promise<void> {
+    this.resetValidationVariables();
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.processValidationError();
       return;
     }
     const formValue = this.form.getRawValue();
@@ -99,7 +158,7 @@ export class Register {
     this.location.back();
   }
 
-  onAccountTypeChanged(value:boolean){
+  onAccountTypeChanged(value: boolean) {
     this.accountType = value ? UserRole.Host : UserRole.User;
     console.log(this.accountType);
   }
