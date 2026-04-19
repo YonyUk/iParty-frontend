@@ -1,24 +1,45 @@
 <div class="page">
-    <form class="register" action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div ngIf="error" class="error-box">
-            <p>{{ errorMessage }}</p>
-        </div>
-        <div class="personal-data">
-            <input type="text" formControlName="username" id="username-input" placeholder="username">
-            <input type="email" formControlName="email" id="email-input" placeholder="email">
-        </div>
-        <div class="password">
-            <input type="password" formControlName="password" id="password-input" placeholder="password">
-            <input type="password" formControlName="confirmPassword" id="password-confirm-input" placeholder="confirm">
-        </div>
-        <div class="link">
-            <small>ALready hav an account? <a href="users/login">Log in</a></small>
-        </div>
-        <div class="controls">
-            <button type="submit">
-                Register
-            </button>
-            <button (click)="cancel()">Cancel</button>
-        </div>
-    </form>
+  <form class="register" action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="selector">
+      <div class="icons">
+        @if (accountType == "User") {
+          <ng-icon name="bootstrapPerson" size="60" color="rgba(255,255,255,0.5)"></ng-icon>
+        }
+        @else {
+          <ng-icon name="bootstrapHouses" size="60" color="rgba(255,255,255,0.5)"></ng-icon>
+        }
+      </div>
+      <lib-toogle-button></lib-toogle-button>
+    </div>
+    @if (error) {
+      <div class="error-box">
+        <small>{{ errorMessage }}</small>
+      </div>
+    }
+    <div class="personal-data">
+      <input type="text" formControlName="username" id="username-input" placeholder="username" />
+      <input type="email" formControlName="email" id="email-input" placeholder="email" />
+    </div>
+    <div class="password">
+      <input
+        type="password"
+        formControlName="password"
+        id="password-input"
+        placeholder="password"
+      />
+      <input
+        type="password"
+        formControlName="confirmPassword"
+        id="password-confirm-input"
+        placeholder="confirm"
+      />
+    </div>
+    <div class="link">
+      <small>ALready hav an account? <a href="users/login">Log in</a></small>
+    </div>
+    <div class="controls">
+      <button type="submit">Register</button>
+      <button (click)="cancel()">Cancel</button>
+    </div>
+  </form>
 </div>
