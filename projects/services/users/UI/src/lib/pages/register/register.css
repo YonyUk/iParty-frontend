@@ -1,0 +1,86 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.register input {
+    background-color: rgba(0, 0, 0, 0.4);
+    outline: none;
+    border: 1px rgba(255, 255, 255, 0.3) solid;
+    border-radius: 15px;
+    padding: 3px;
+    padding-left: 5px;
+    color: white;
+    transition: all 0.3s;
+}
+
+.register a{
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.link{
+    margin: 10px;
+}
+
+.register small{
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.register input:hover,input:focus,input:focus-visible{
+    border: 1px white solid;
+}
+
+.register button {
+    background-color: inherit;
+    outline: none;
+    border: 1px rgba(255, 255, 255, 0.3) solid;
+    border-radius: 15px;
+    padding: 7px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s;
+    min-width: 100px;
+}
+
+.controls{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    gap: 20px;
+}
+
+.register button:hover{
+    border: 1px white solid;
+    color: white;
+    outline: 1px white solid;
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    max-width: 40%;
+    width: fit-content;
+    gap: 15px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px white solid;
+}
+
+.personal-data,
+.password {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}

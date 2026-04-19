@@ -1,14 +1,24 @@
 <div class="page">
-    <form action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
-        <input type="text" formControlName="username" id="username-input" placeholder="username">
-        <input type="email" formControlName="email" id="email-input" placeholder="email">
-        <input type="password" formControlName="password" id="password-input" placeholder="password">
-        <input type="password" formControlName="confirmPassword" id="password-confirm-input" placeholder="confirm">
-    
+    <form class="register" action="submit" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div ngIf="error" class="error-box">
+            <p>{{ errorMessage }}</p>
+        </div>
+        <div class="personal-data">
+            <input type="text" formControlName="username" id="username-input" placeholder="username">
+            <input type="email" formControlName="email" id="email-input" placeholder="email">
+        </div>
+        <div class="password">
+            <input type="password" formControlName="password" id="password-input" placeholder="password">
+            <input type="password" formControlName="confirmPassword" id="password-confirm-input" placeholder="confirm">
+        </div>
+        <div class="link">
+            <small>ALready hav an account? <a href="users/login">Log in</a></small>
+        </div>
         <div class="controls">
             <button type="submit">
-                register
+                Register
             </button>
+            <button (click)="cancel()">Cancel</button>
         </div>
     </form>
 </div>
