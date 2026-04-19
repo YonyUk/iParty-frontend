@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import {
     Email,
@@ -15,12 +15,13 @@ import {
 import {
     RegisterUserResponseDTO
 } from "users-application";
-import { ProblemDetailsError, ValidationProblemDetailsError } from "common";
+import { API_HOST_TOKEN, ProblemDetailsError, ValidationProblemDetailsError } from "common";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
 
-    private readonly baseUrl = '/users';
+    private readonly apiHost = inject(API_HOST_TOKEN);
+    private readonly baseUrl = `${this.apiHost}/users`;
 
     constructor(
         private readonly httpClient: HttpClient
@@ -54,7 +55,7 @@ export class UserRepository implements IUserRepository {
             formData.append("role", data.role);
 
             const response = await firstValueFrom(
-                this.httpClient.post<RegisterUserResponseDTO>('/register', formData)
+                this.httpClient.post<RegisterUserResponseDTO>(`${this.baseUrl}/register`, formData)
             );
             return response.id;
         } catch (error) {
@@ -66,7 +67,7 @@ export class UserRepository implements IUserRepository {
         try {
             const formData = new FormData();
             formData.append("password", password.Value);
-            await firstValueFrom(this.httpClient.post("/me/change_password", formData));
+            await firstValueFrom(this.httpClient.post(`${this.baseUrl}/me/change_password`, formData));
 
         } catch (error) {
             throw this.ThrowError(error as HttpErrorResponse);
@@ -76,7 +77,7 @@ export class UserRepository implements IUserRepository {
     async getById(id: string): Promise<User> {
         try {
             const response = await firstValueFrom(
-                this.httpClient.get<User>(`/${id}`)
+                this.httpClient.get<User>(`${this.baseUrl}/${id}`)
             );
             return response;
         } catch (error) {
@@ -87,7 +88,7 @@ export class UserRepository implements IUserRepository {
     async getByName(username: UserName): Promise<User> {
         try {
             const response = await firstValueFrom(
-                this.httpClient.get<User>(`/name/${username.Value}`)
+                this.httpClient.get<User>(`${this.baseUrl}/name/${username.Value}`)
             );
             return response;
         } catch (error) {
@@ -98,7 +99,7 @@ export class UserRepository implements IUserRepository {
     async getByEmail(email: Email): Promise<User> {
         try {
             const response = await firstValueFrom(
-                this.httpClient.get<User>(`/email/${email.Value}`)
+                this.httpClient.get<User>(`${this.baseUrl}/email/${email.Value}`)
             );
             return response;
         } catch (error) {
@@ -109,7 +110,7 @@ export class UserRepository implements IUserRepository {
     async getUsers(criteria: IUserCriteria): Promise<User[]> {
         try {
             const response = await firstValueFrom(
-                this.httpClient.get<User[]>('',{
+                this.httpClient.get<User[]>(this.baseUrl,{
                     params:{
                         page:criteria.page,
                         role:criteria.role
@@ -125,7 +126,7 @@ export class UserRepository implements IUserRepository {
     async delete(): Promise<void> {
         try {
             await firstValueFrom(
-                this.httpClient.delete('me')
+                this.httpClient.delete(`${this.baseUrl}/me`)
             );
         } catch (error) {
             throw this.ThrowError(error as HttpErrorResponse);
