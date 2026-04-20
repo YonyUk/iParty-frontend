@@ -12,6 +12,7 @@ import {
 import { UserAlreadyExistsError, UserRole } from 'users-domain';
 import { Location } from '@angular/common';
 import { ToogleButton } from '../../components/toogle-button/toogle-button';
+import { ValidationProblemDetailsError } from 'common';
 
 @Component({
   selector: 'lib-register',
@@ -34,11 +35,11 @@ export class Register {
   error: boolean = false;
   errorMessage: string = '';
 
-  usernameRequiredError = false;
-  emailRequiredError = false;
-  passwordRequiredError = false;
+  usernameError = false;
+  emailError = false;
+  passwordError = false;
 
-  validationErrorMessage?:string;
+  validationErrorMessage?: string;
   validationErrors = false;
 
   constructor(
@@ -77,9 +78,9 @@ export class Register {
   }
 
   private resetValidationVariables() {
-    this.usernameRequiredError = false;
-    this.emailRequiredError = false;
-    this.passwordRequiredError = false;
+    this.usernameError = false;
+    this.emailError = false;
+    this.passwordError = false;
 
     this.validationErrorMessage = undefined;
     this.validationErrors = false;
@@ -87,43 +88,79 @@ export class Register {
 
   private processValidationError() {
     if (this.form.get('username')?.errors?.['required']) {
-      this.usernameRequiredError = true;
+      this.usernameError = true;
     }
     if (this.form.get('email')?.errors?.['required']) {
-      this.emailRequiredError = true;
+      this.emailError = true;
     }
     if (this.form.get('password')?.errors?.['required']) {
-      this.passwordRequiredError = true;
+      this.passwordError = true;
     }
 
     if (
       this.form.get('username')?.errors?.['minlength'] ||
       this.form.get('username')?.errors?.['maxlength']
     ) {
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.usernameError = true;
       this.validationErrors = true;
-      this.validationErrorMessage = `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}`;
-    } else if (this.form.get('email')?.errors?.['email']) {
+      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}. `;
+    }
+    if (this.form.get('email')?.errors?.['email']) {
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.emailError = true;
       this.validationErrors = true;
-      this.validationErrorMessage = `Invalid email format`;
-    } else if (
+      this.validationErrorMessage += `Invalid email format. `;
+    }
+    if (
       this.form.get('password')?.errors?.['minlength'] ||
       this.form.get('password')?.errors?.['maxlength']
     ) {
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.passwordError = true;
       this.validationErrors = true;
-      this.validationErrorMessage = `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}`;
+      this.validationErrorMessage += `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}. `;
     }
 
     if (this.form.hasError('passwordMismatch')) {
-      this.validationErrorMessage = "passwords doesn't matches";
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.validationErrorMessage += "passwords doesn't matches";
     }
 
-    if (!this.validationErrorMessage &&
-      (this.usernameRequiredError || this.emailRequiredError || this.passwordRequiredError)
-    ){
+    if (
+      !this.validationErrorMessage &&
+      (this.usernameError || this.emailError || this.passwordError)
+    ) {
       this.validationErrorMessage = 'Please, fill all the required fields';
     }
+  }
 
-    console.log(this.form.get("username")?.errors);
+  private processResponseError(error: any) {
+    if (error instanceof UserAlreadyExistsError) {
+      this.error = true;
+      this.errorMessage = (error as UserAlreadyExistsError).message;
+      this.changeDetector.detectChanges();
+      return;
+    }
+    if (error instanceof ValidationProblemDetailsError) {
+      this.error = true;
+      this.errorMessage = (error as ValidationProblemDetailsError).message;
+      const errors = (error as ValidationProblemDetailsError).Errors;
+      if ('data.UserName' in errors) {
+        this.errorMessage += ` ${errors['data.UserName'].join(';')}.`;
+      }
+      if ('data.Email' in errors) {
+        this.errorMessage += ` ${errors['data.Email'].join(';')}.`;
+      }
+      if ('data.Password' in errors) {
+        this.errorMessage += ` ${errors['data.Password'].join(';')}.`;
+      }
+      if ('data.Role' in errors) {
+        this.errorMessage += ` ${errors['data.Role'].join(';')}`;
+      }
+      this.changeDetector.detectChanges();
+      return;
+    }
   }
 
   async onSubmit(): Promise<void> {
@@ -146,11 +183,7 @@ export class Register {
       await this.register.handle(command);
       this.router.navigate(['users', 'login']);
     } catch (error) {
-      if (error instanceof UserAlreadyExistsError) {
-        this.error = true;
-        this.errorMessage = (error as UserAlreadyExistsError).message;
-        this.changeDetector.detectChanges();
-      }
+      this.processResponseError(error);
     }
   }
 
@@ -160,6 +193,5 @@ export class Register {
 
   onAccountTypeChanged(value: boolean) {
     this.accountType = value ? UserRole.Host : UserRole.User;
-    console.log(this.accountType);
   }
 }

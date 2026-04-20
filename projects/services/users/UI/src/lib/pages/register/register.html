@@ -39,14 +39,14 @@
         formControlName="username"
         id="username-input"
         placeholder="username"
-        [class.invalid-field]="usernameRequiredError"
+        [class.invalid-field]="usernameError"
       />
       <input
         type="email"
         formControlName="email"
         id="email-input"
         placeholder="email"
-        [class.invalid-field]="emailRequiredError"
+        [class.invalid-field]="emailError"
       />
     </div>
     <div class="password">
@@ -55,7 +55,7 @@
         formControlName="password"
         id="password-input"
         placeholder="password"
-        [class.invalid-field]="passwordRequiredError"
+        [class.invalid-field]="passwordError"
       />
       <input
         type="password"
