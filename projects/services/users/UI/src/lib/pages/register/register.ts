@@ -40,7 +40,6 @@ export class Register {
   passwordError = false;
 
   validationErrorMessage?: string;
-  validationErrors = false;
 
   constructor(
     private readonly location: Location,
@@ -83,7 +82,6 @@ export class Register {
     this.passwordError = false;
 
     this.validationErrorMessage = undefined;
-    this.validationErrors = false;
   }
 
   private processValidationError() {
@@ -103,13 +101,11 @@ export class Register {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.usernameError = true;
-      this.validationErrors = true;
       this.validationErrorMessage += `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}. `;
     }
     if (this.form.get('email')?.errors?.['email']) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.emailError = true;
-      this.validationErrors = true;
       this.validationErrorMessage += `Invalid email format. `;
     }
     if (
@@ -118,7 +114,6 @@ export class Register {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.passwordError = true;
-      this.validationErrors = true;
       this.validationErrorMessage += `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}. `;
     }
 

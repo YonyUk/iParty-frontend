@@ -1,1 +1,37 @@
-<p>login works!</p>
+<div class="page">
+  <form action="submit" class="login" [formGroup]="form" (ngSubmit)="onSubmit()">
+    @if (error) {
+      <div class="error-box">
+        <small>{{ errorMessage }}</small>
+      </div>
+    }
+    @if (validationErrorMessage) {
+      <div class="error-box">
+        <small>{{ validationErrorMessage }}</small>
+      </div>
+    }
+    <div class="personal-data">
+      <input
+        type="text"
+        id="username-input"
+        formControlName="username"
+        placeholder="username"
+        [class.invalid-field]="usernameError"
+      />
+      <input
+        type="password"
+        formControlName="password"
+        id="password-input"
+        placeholder="password"
+        [class.invalid-field]="passwordError"
+      />
+    </div>
+    <div class="link">
+      <small>Don't have an account? <a href="users/register">Register</a></small>
+    </div>
+    <div class="controls">
+      <button type="submit">Log in</button>
+      <button>Cancel</button>
+    </div>
+  </form>
+</div>
