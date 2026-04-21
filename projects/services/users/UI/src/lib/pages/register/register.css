@@ -87,6 +87,10 @@
     gap: 20px;
 }
 
+.error-box{
+  max-width: 20rem;
+}
+
 .error-box small{
   display: flex;
   justify-content: center;
