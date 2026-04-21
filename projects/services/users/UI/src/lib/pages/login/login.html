@@ -1,5 +1,13 @@
 <div class="page">
   <form action="submit" class="login" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="icon">
+      <ng-icon
+        class="icon"
+        name="bootstrapPerson"
+        size="70"
+        color="rgba(255,255,255,0.5)"
+      ></ng-icon>
+    </div>
     @if (error) {
       <div class="error-box">
         <small>{{ errorMessage }}</small>
@@ -31,7 +39,7 @@
     </div>
     <div class="controls">
       <button type="submit">Log in</button>
-      <button>Cancel</button>
+      <button type="reset" (click)="cancel()">Cancel</button>
     </div>
   </form>
 </div>

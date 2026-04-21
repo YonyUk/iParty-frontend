@@ -26,10 +26,10 @@ import { ValidationProblemDetailsError } from 'common';
   ],
 })
 export class Register {
-  private fb = inject(FormBuilder);
-  private register = inject(RegisterUserCommandHandler);
-  private config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly register = inject(RegisterUserCommandHandler);
+  private readonly config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
+  private readonly router = inject(Router);
 
   accountType: UserRole = UserRole.User;
   error: boolean = false;

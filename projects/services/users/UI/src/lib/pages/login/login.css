@@ -102,3 +102,10 @@
 .invalid-field{
   border-color: red !important;
 }
+
+.icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}

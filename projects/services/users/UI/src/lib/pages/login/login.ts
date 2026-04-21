@@ -1,22 +1,39 @@
+import { bootstrapPerson } from '@ng-icons/bootstrap-icons';
 import { ValidationProblemDetailsError } from 'common';
 import { UserNotFoundError } from 'users-domain';
 import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN } from 'users-infrastructure';
+import {
+  provideIUsersDomainRulesConfigProvider,
+  provideLoginUserCommandHandler,
+  USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN,
+} from 'users-infrastructure';
 import { LoginUserCommand, LoginUserCommandHandler } from 'users-application';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'lib-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIconComponent],
   templateUrl: './login.html',
   styleUrl: './login.css',
+  providers: [
+    provideIcons({ bootstrapPerson }),
+    provideLoginUserCommandHandler(),
+    provideIUsersDomainRulesConfigProvider(),
+  ],
 })
 export class Login {
-  private fb = inject(FormBuilder);
-  private config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
-  private authenticator = inject(LoginUserCommandHandler);
+  private readonly fb = inject(FormBuilder);
+  private readonly config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
+  private readonly authenticator = inject(LoginUserCommandHandler);
+  private readonly router = inject(Router);
 
-  constructor(private readonly changeDetector: ChangeDetectorRef) {}
+  constructor(
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly location: Location
+  ) {}
 
   error: boolean = false;
   errorMessage: string = '';
@@ -133,5 +150,9 @@ export class Login {
     } catch (error) {
       this.processResponseError(error);
     }
+  }
+
+  cancel() {
+    this.location.back();
   }
 }
