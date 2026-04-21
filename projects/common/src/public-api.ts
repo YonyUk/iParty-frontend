@@ -19,3 +19,5 @@ export * from './lib/application/handlers/IQueryHandlerAsync';
 export * from './lib/infrastructure/errors/ProblemDetailsError';
 export * from './lib/infrastructure/errors/ValidationProblemDetailsError';
 export * from './lib/tokens';
+export * from './lib/infrastructure/errors/dtos/IProblemDetailsDTO';
+export * from './lib/infrastructure/errors/dtos/IValidationProblemDetailsDTO';

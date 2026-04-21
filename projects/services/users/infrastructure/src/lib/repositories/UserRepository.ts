@@ -15,7 +15,7 @@ import {
 import {
     RegisterUserResponseDTO
 } from "users-application";
-import { API_HOST_TOKEN, ProblemDetailsError, ValidationProblemDetailsError } from "common";
+import { API_HOST_TOKEN, IProblemDetailsDTO, IValidationProblemDetailsDTO, ProblemDetailsError, ValidationProblemDetailsError } from "common";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
