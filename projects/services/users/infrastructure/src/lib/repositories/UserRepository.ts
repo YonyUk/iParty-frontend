@@ -41,8 +41,7 @@ export class UserRepository implements IUserRepository {
       );
       return true;
     } catch (error) {
-      if ((error as HttpErrorResponse).status === 401)
-        throw new UserNotFoundError((error as HttpErrorResponse).message);
+      if ((error as HttpErrorResponse).status === 401) return false;
       throw this.ThrowError(error as HttpErrorResponse);
     }
   }
@@ -50,9 +49,9 @@ export class UserRepository implements IUserRepository {
   async me(): Promise<User> {
     try {
       const response = await firstValueFrom(
-        this.httpClient.get<User>(`${this.baseUrl}/me`,{
-          withCredentials:true
-        })
+        this.httpClient.get<User>(`${this.baseUrl}/me`, {
+          withCredentials: true,
+        }),
       );
       return response;
     } catch (error) {
@@ -63,9 +62,9 @@ export class UserRepository implements IUserRepository {
   async logout(): Promise<boolean> {
     try {
       await firstValueFrom(
-        this.httpClient.delete(`${this.baseUrl}/logout`,{
-          withCredentials:true
-        })
+        this.httpClient.delete(`${this.baseUrl}/logout`, {
+          withCredentials: true,
+        }),
       );
       return true;
     } catch (error) {
