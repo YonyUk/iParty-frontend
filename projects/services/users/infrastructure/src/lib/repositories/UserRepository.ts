@@ -68,7 +68,9 @@ export class UserRepository implements IUserRepository {
         try {
             const formData = new FormData();
             formData.append("password", password.Value);
-            await firstValueFrom(this.httpClient.post(`${this.baseUrl}/me/change_password`, formData));
+            await firstValueFrom(this.httpClient.post(`${this.baseUrl}/me/change_password`, formData,{
+              withCredentials:true
+            }));
 
         } catch (error) {
             throw this.ThrowError(error as HttpErrorResponse);
@@ -127,7 +129,11 @@ export class UserRepository implements IUserRepository {
     async delete(): Promise<void> {
         try {
             await firstValueFrom(
-                this.httpClient.delete(`${this.baseUrl}/me`)
+                this.httpClient.delete(`${this.baseUrl}/me`,
+                  {
+                    withCredentials:true
+                  }
+                )
             );
         } catch (error) {
             throw this.ThrowError(error as HttpErrorResponse);
