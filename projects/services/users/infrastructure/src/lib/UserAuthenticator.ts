@@ -38,7 +38,9 @@ export class UserAuthenticator implements IUserAuthenticator {
       formData.append('password', password.Value);
 
       const response = await firstValueFrom(
-        this.httpClient.post(`${this.baseUrl}/login`, formData),
+        this.httpClient.post(`${this.baseUrl}/login`, formData, {
+          withCredentials: true,
+        }),
       );
       return true;
     } catch (error) {
