@@ -1,5 +1,5 @@
 import { InjectionToken } from "@angular/core";
-import { IUserAuthenticator, IUserRepository, IUsersDomainRulesConfigProvider, UsersDomainRulesConfigOptions } from "users-domain";
+import { IUserRepository, IUsersDomainRulesConfigProvider, UsersDomainRulesConfigOptions } from "users-domain";
 import { ICommandValidator } from "common";
 import { LoginUserCommand, RegisterUserCommand } from "users-application";
 
@@ -27,5 +27,3 @@ export const REGISTER_USER_COMMAND_VALIDATOR_TOKEN = new InjectionToken<ICommand
 export const LOGIN_USER_COMMAND_VALIDATOR_TOKEN = new InjectionToken<ICommandValidator<LoginUserCommand>>(
   'LOGIN_USER_COMMAND_VALIDATOR_TOKEN'
 );
-
-export const USER_AUTHENTICATOR_TOKEN = new InjectionToken<IUserAuthenticator>('USER_AUTHENTICATOR_TOKEN');
