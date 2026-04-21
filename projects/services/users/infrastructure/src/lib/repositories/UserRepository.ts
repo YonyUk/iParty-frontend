@@ -1,4 +1,3 @@
-import { LoginResponseDTO } from './../../../../application/src/lib/dtos/LoginResponseDTO';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
