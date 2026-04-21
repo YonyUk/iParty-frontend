@@ -5,10 +5,11 @@ import {
   IValidationProblemDetailsDTO,
   ValidationProblemDetailsError,
 } from 'common';
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IUserAuthenticator, Password, UserName, UserNotFoundError } from 'users-domain';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
+@Injectable()
 export class UserAuthenticator implements IUserAuthenticator {
   private readonly apiHost = inject(API_HOST_TOKEN);
   private readonly baseUrl = `${this.apiHost}/users`;
