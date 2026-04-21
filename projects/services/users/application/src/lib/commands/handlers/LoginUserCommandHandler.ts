@@ -1,5 +1,5 @@
-import { IUserAuthenticator, IUsersDomainRulesConfigProvider, Password, UserName } from "users-domain";
-import { ICommandHandler, ICommandHandlerAsync, ICommandValidator } from "common";
+import { IUserRepository, IUsersDomainRulesConfigProvider, Password, UserName } from "users-domain";
+import { ICommandHandlerAsync, ICommandValidator } from "common";
 import { LoginUserCommand } from "../LoginUserCommand";
 import { LoginResponseDTO } from "../../dtos/LoginResponseDTO";
 
@@ -7,7 +7,7 @@ export class LoginUserCommandHandler implements ICommandHandlerAsync<LoginUserCo
 
     constructor(
         private readonly validator: ICommandValidator<LoginUserCommand>,
-        private readonly userAuthenticator: IUserAuthenticator,
+        private readonly repository: IUserRepository,
         private readonly configProvider: IUsersDomainRulesConfigProvider
     ) {
 
@@ -16,7 +16,7 @@ export class LoginUserCommandHandler implements ICommandHandlerAsync<LoginUserCo
         this.validator.validate(command);
         const username = new UserName(command.data.username, this.configProvider.UserNameDomaiRules);
         const password = new Password(command.data.password, this.configProvider.PasswordDomainRules);
-        const logged = await this.userAuthenticator.authenticate(username, password);
+        const logged = await this.repository.login(username, password);
         return { logged }
 
     }

@@ -12,4 +12,3 @@ export * from './lib/providers/validators/register-user-command-validator-provid
 export * from './lib/providers/validators/login-user-command-validator-provider';
 export * from './lib/providers/validators/provider';
 export * from './lib/providers/providers';
-export * from './lib/UserAuthenticator';
