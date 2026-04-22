@@ -12,3 +12,7 @@ export * from './lib/providers/validators/register-user-command-validator-provid
 export * from './lib/providers/validators/login-user-command-validator-provider';
 export * from './lib/providers/validators/provider';
 export * from './lib/providers/providers';
+export * from './lib/providers/services/user-repository-http-error-mapper-provider';
+export * from './lib/providers/services/provider';
+export * from './lib/services/HttpErrorMapper/HttpErrorMapper';
+export * from './lib/services/HttpErrorMapper/IHttpErrorMapper';
