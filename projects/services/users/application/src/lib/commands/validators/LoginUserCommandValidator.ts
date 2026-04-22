@@ -10,7 +10,7 @@ export class LoginUserCommandValidator implements ICommandValidator<LoginUserCom
         usersDomainRulesConfigProvider: IUsersDomainRulesConfigProvider
     ) {
         const passworRules = usersDomainRulesConfigProvider.PasswordDomainRules;
-        const usernameRules = usersDomainRulesConfigProvider.UserNameDomaiRules;
+        const usernameRules = usersDomainRulesConfigProvider.UserNameDomainRules;
 
         this.validationSchema = z.object({
             username: z.string().max(usernameRules.maxLenght).min(usernameRules.minLength)
