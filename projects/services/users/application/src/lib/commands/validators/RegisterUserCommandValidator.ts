@@ -13,7 +13,7 @@ export class RegisterUserCommandValidator implements ICommandValidator<RegisterU
         const passworRules = usersDomainRulesConfigProvider.PasswordDomainRules;
 
         this.validationSchema = z.object({
-            username: z.string().max(usernameRules.maxLenght).min(usernameRules.minLength)
+            username: z.string().max(usernameRules.maxLength).min(usernameRules.minLength)
                 .regex(/^\w+$/),
             password: z.string().max(passworRules.maxLength).min(passworRules.minLength),
             email: z.email(),
