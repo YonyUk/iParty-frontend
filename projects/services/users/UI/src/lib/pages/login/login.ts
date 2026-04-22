@@ -49,7 +49,7 @@ export class Login {
       [
         Validators.required,
         Validators.minLength(this.config.UserNameDomainRules.minLength),
-        Validators.maxLength(this.config.UserNameDomainRules.maxLenght),
+        Validators.maxLength(this.config.UserNameDomainRules.maxLength),
       ],
     ],
     password: [
@@ -106,7 +106,7 @@ export class Login {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.usernameError = true;
-      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomainRules.minLength} and ${this.config.UserNameDomainRules.maxLenght}. `;
+      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomainRules.minLength} and ${this.config.UserNameDomainRules.maxLength}. `;
     }
     if (
       this.form.get('password')?.errors?.['minlength'] ||
