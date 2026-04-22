@@ -4,7 +4,7 @@ import { InvalidUserNameError } from "../errors/InvalidUserNameError";
 export class UserNameDomainRules implements IDomainRule<string> {
     constructor(
         readonly minLength: number,
-        readonly maxLenght: number
+        readonly maxLength: number
     ) {
 
     }
@@ -21,8 +21,8 @@ export class UserNameDomainRules implements IDomainRule<string> {
         if (!value || value.trim().length === 0) {
             throw new InvalidUserNameError("value can't be null nor whitespace");
         }
-        if (value.length < this.minLength || value.length > this.maxLenght) {
-            throw new InvalidUserNameError(`value length must be between ${this.minLength} and ${this.maxLenght}`);
+        if (value.length < this.minLength || value.length > this.maxLength) {
+            throw new InvalidUserNameError(`value length must be between ${this.minLength} and ${this.maxLength}`);
         }
         const pattern = /^[a-zA-Z0-9_]+$/;
         if (!pattern.test(value)) {
