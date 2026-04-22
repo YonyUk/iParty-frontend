@@ -52,8 +52,8 @@ export class Register {
         '',
         [
           Validators.required,
-          Validators.minLength(this.config.UserNameDomaiRules.minLength),
-          Validators.maxLength(this.config.UserNameDomaiRules.maxLenght),
+          Validators.minLength(this.config.UserNameDomainRules.minLength),
+          Validators.maxLength(this.config.UserNameDomainRules.maxLenght),
         ],
       ],
       email: ['', [Validators.required, Validators.email]],
@@ -101,7 +101,7 @@ export class Register {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.usernameError = true;
-      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}. `;
+      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomainRules.minLength} and ${this.config.UserNameDomainRules.maxLenght}. `;
     }
     if (this.form.get('email')?.errors?.['email']) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
