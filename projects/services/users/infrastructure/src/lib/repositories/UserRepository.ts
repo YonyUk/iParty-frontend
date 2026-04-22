@@ -8,25 +8,24 @@ import {
   Password,
   RegisterUserDataDTO,
   User,
-  UserAlreadyExistsError,
   UserName,
-  UserNotFoundError,
 } from 'users-domain';
 import { RegisterUserResponseDTO } from 'users-application';
-import {
-  API_HOST_TOKEN,
-  IProblemDetailsDTO,
-  IValidationProblemDetailsDTO,
-  ProblemDetailsError,
-  ValidationProblemDetailsError,
-} from 'common';
+import { API_HOST_TOKEN } from 'common';
+import { USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN } from '../tokens';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   private readonly apiHost = inject(API_HOST_TOKEN);
+  private readonly httpErrorMapper = inject(USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN);
   private readonly baseUrl = `${this.apiHost}/users`;
 
   constructor(private readonly httpClient: HttpClient) {}
+
+  private handleError(error: HttpErrorResponse): Error {
+    if (!this.httpErrorMapper.StatusCodesMapped.includes(error.status)) return error;
+    return this.httpErrorMapper.map(error);
+  }
 
   async login(username: UserName, password: Password): Promise<boolean> {
     try {
@@ -41,8 +40,9 @@ export class UserRepository implements IUserRepository {
       );
       return true;
     } catch (error) {
+      if (!(error instanceof HttpErrorResponse)) throw error;
       if ((error as HttpErrorResponse).status === 401) return false;
-      throw this.ThrowError(error as HttpErrorResponse);
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -55,7 +55,8 @@ export class UserRepository implements IUserRepository {
       );
       return response;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -68,26 +69,8 @@ export class UserRepository implements IUserRepository {
       );
       return true;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
-    }
-  }
-
-  private ThrowError(errorResponse: HttpErrorResponse): Error {
-    switch (errorResponse.status) {
-      case 409:
-        const conflictError = errorResponse.error as IProblemDetailsDTO;
-        throw new UserAlreadyExistsError(conflictError.detail);
-
-      case 400:
-        const validationError = errorResponse.error as IValidationProblemDetailsDTO;
-        throw new ValidationProblemDetailsError(validationError);
-
-      case 404:
-        const notFoundError = errorResponse.error as IProblemDetailsDTO;
-        throw new UserNotFoundError(notFoundError.detail);
-
-      default:
-        throw errorResponse;
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -104,7 +87,8 @@ export class UserRepository implements IUserRepository {
       );
       return response.id;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -118,7 +102,8 @@ export class UserRepository implements IUserRepository {
         }),
       );
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -127,7 +112,8 @@ export class UserRepository implements IUserRepository {
       const response = await firstValueFrom(this.httpClient.get<User>(`${this.baseUrl}/${id}`));
       return response;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -138,7 +124,8 @@ export class UserRepository implements IUserRepository {
       );
       return response;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -149,7 +136,8 @@ export class UserRepository implements IUserRepository {
       );
       return response;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -165,7 +153,8 @@ export class UserRepository implements IUserRepository {
       );
       return response;
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 
@@ -177,7 +166,8 @@ export class UserRepository implements IUserRepository {
         }),
       );
     } catch (error) {
-      throw this.ThrowError(error as HttpErrorResponse);
+      if (!(error instanceof HttpErrorResponse)) throw error;
+      throw this.handleError(error as HttpErrorResponse);
     }
   }
 }

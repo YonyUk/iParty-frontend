@@ -2,6 +2,7 @@ import { InjectionToken } from "@angular/core";
 import { IUserRepository, IUsersDomainRulesConfigProvider, UsersDomainRulesConfigOptions } from "users-domain";
 import { ICommandValidator } from "common";
 import { LoginUserCommand, RegisterUserCommand } from "users-application";
+import { IHttpErrorMapper } from "./services/HttpErrorMapper/IHttpErrorMapper";
 
 export const USERS_DOMAIN_RULES_CONFIG_OPTIONS_TOKEN = new InjectionToken<UsersDomainRulesConfigOptions>(
     'USERS_DOMAIN_RULES_CONFIG_OPTIONS_TOKEN',
@@ -26,4 +27,8 @@ export const REGISTER_USER_COMMAND_VALIDATOR_TOKEN = new InjectionToken<ICommand
 
 export const LOGIN_USER_COMMAND_VALIDATOR_TOKEN = new InjectionToken<ICommandValidator<LoginUserCommand>>(
   'LOGIN_USER_COMMAND_VALIDATOR_TOKEN'
+);
+
+export const USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN = new InjectionToken<IHttpErrorMapper>(
+  'USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN'
 );
