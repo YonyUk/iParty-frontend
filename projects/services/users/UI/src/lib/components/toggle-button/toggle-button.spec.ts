@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToogleButton } from './toogle-button';
+import { ToogleButton } from './toggle-button';
 
 describe('ToogleButton', () => {
   let component: ToogleButton;

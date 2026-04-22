@@ -2,12 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'lib-toogle-button',
+  selector: 'lib-toggle-button',
   imports: [FormsModule],
-  templateUrl: './toogle-button.html',
-  styleUrl: './toogle-button.css',
+  templateUrl: './toggle-button.html',
+  styleUrl: './toggle-button.css',
 })
-export class ToogleButton {
+export class ToggleButton {
 
   value:boolean = false;
   @Output() valueChanged = new EventEmitter<boolean>();
