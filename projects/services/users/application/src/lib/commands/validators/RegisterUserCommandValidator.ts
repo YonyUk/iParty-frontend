@@ -9,7 +9,7 @@ export class RegisterUserCommandValidator implements ICommandValidator<RegisterU
     constructor(
         usersDomainRulesConfigProvider: IUsersDomainRulesConfigProvider
     ) {
-        const usernameRules = usersDomainRulesConfigProvider.UserNameDomaiRules;
+        const usernameRules = usersDomainRulesConfigProvider.UserNameDomainRules;
         const passworRules = usersDomainRulesConfigProvider.PasswordDomainRules;
 
         this.validationSchema = z.object({
