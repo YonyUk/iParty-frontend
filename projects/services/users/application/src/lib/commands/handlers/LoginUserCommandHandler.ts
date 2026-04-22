@@ -14,7 +14,7 @@ export class LoginUserCommandHandler implements ICommandHandlerAsync<LoginUserCo
     }
     async handle(command: LoginUserCommand): Promise<LoginResponseDTO> {
         this.validator.validate(command);
-        const username = new UserName(command.data.username, this.configProvider.UserNameDomaiRules);
+        const username = new UserName(command.data.username, this.configProvider.UserNameDomainRules);
         const password = new Password(command.data.password, this.configProvider.PasswordDomainRules);
         const logged = await this.repository.login(username, password);
         return { logged }

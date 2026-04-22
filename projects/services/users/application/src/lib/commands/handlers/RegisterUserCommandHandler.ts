@@ -15,7 +15,7 @@ export class RegisterUserCommandHandler implements ICommandHandlerAsync<Register
 
     async handle(command: RegisterUserCommand): Promise<RegisterUserResponseDTO> {
         this.validator.validate(command);
-        const usernameRules = this.usersDomainRulesConfigProvider.UserNameDomaiRules;
+        const usernameRules = this.usersDomainRulesConfigProvider.UserNameDomainRules;
         const passwordRules = this.usersDomainRulesConfigProvider.PasswordDomainRules;
         const username = new UserName(command.data.username, usernameRules);
         const email = new Email(command.data.email);
