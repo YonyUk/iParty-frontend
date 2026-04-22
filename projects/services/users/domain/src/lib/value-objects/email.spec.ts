@@ -2,14 +2,22 @@ import { Email } from './Email';
 import { InvalidEmailFormatError } from '../errors/InvalidEmailFormatError';
 
 describe('Email Value Object', () => {
-  it('should create a valid email', () => {
-    const validEmail = 'test@example.com';
-    const email = new Email(validEmail);
-    expect(email.Value).toBe(validEmail);
-  });
+  it.each([
+    ['test@example.com', true],
+    ['', false],
+    ['   ', false],
+    ['undefined', false],
+    [undefined,false]
+  ])('should handle email "%s" (valid: %s)', (emailValue, valid) => {
 
-  it('should throw an error for an invalid email', () => {
-    const invalidEmail = 'test@.com';
-    expect(() => new Email(invalidEmail)).toThrow(InvalidEmailFormatError);
+    const act = () => new Email(emailValue!);
+
+    if (valid) {
+      expect(act).not.toThrow();
+      const email = act();
+      expect(email.Value).toBe(emailValue);
+    } else {
+      expect(act).toThrow(InvalidEmailFormatError);
+    }
   });
 });

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToogleButton } from './toggle-button';
+import { ToggleButton } from './toggle-button';
 
 describe('ToogleButton', () => {
-  let component: ToogleButton;
-  let fixture: ComponentFixture<ToogleButton>;
+  let component: ToggleButton;
+  let fixture: ComponentFixture<ToggleButton>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToogleButton],
+      imports: [ToggleButton],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ToogleButton);
+    fixture = TestBed.createComponent(ToggleButton);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
