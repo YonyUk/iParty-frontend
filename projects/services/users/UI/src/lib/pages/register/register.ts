@@ -11,12 +11,12 @@ import {
 } from 'users-infrastructure';
 import { UserAlreadyExistsError, UserRole } from 'users-domain';
 import { Location } from '@angular/common';
-import { ToogleButton } from '../../components/toogle-button/toogle-button';
+import { ToggleButton } from '../../components/toggle-button/toggle-button';
 import { ValidationProblemDetailsError } from 'common';
 
 @Component({
   selector: 'lib-register',
-  imports: [ReactiveFormsModule, NgIconComponent, ToogleButton],
+  imports: [ReactiveFormsModule, NgIconComponent, ToggleButton],
   templateUrl: './register.html',
   styleUrl: './register.css',
   providers: [
