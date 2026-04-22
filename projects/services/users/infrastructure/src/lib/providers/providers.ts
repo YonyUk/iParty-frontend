@@ -3,12 +3,14 @@ import { provideIUsersDomainRulesConfigProvider } from "./config/users-domain-ru
 import { provideRepositories } from "./repositories/provider";
 import { provideHandlers } from "./handlers/provider";
 import { provideValidators } from "./validators/provider";
+import { provideHttpErrorMappers } from "./services/provider";
 
 export function provideUsersInfrastructure():Provider[]{
     return[
         ...provideRepositories(),
         provideIUsersDomainRulesConfigProvider(),
         ...provideHandlers(),
-        ...provideValidators()
+        ...provideValidators(),
+        ...provideHttpErrorMappers()
     ]
 }
