@@ -1,6 +1,11 @@
 {
   "name": "users-domain",
   "version": "0.0.1",
+    "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  },
   "peerDependencies": {
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0"
