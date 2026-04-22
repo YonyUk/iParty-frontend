@@ -1,0 +1,111 @@
+.page{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.login input {
+    background-color: rgba(0, 0, 0, 0.4);
+    outline: none;
+    border: 1px rgba(255, 255, 255, 0.3) solid;
+    border-radius: 15px;
+    padding: 3px;
+    padding-left: 5px;
+    color: white;
+    transition: all 0.3s;
+    max-width: 70%;
+}
+
+.login a{
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.link{
+    margin: 10px;
+    text-align: center;
+}
+
+.login small{
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.login input:hover,input:focus,input:focus-visible{
+    border: 1px white solid;
+}
+
+.login button {
+    background-color: inherit;
+    outline: none;
+    border: 1px rgba(255, 255, 255, 0.3) solid;
+    border-radius: 15px;
+    padding: 7px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s;
+    min-width: 100px;
+}
+
+.controls{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    gap: 20px;
+}
+
+.login button:hover{
+    border: 1px white solid;
+    color: white;
+    outline: 1px white solid;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    max-width: 40%;
+    width: fit-content;
+    gap: 15px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px white solid;
+}
+
+.personal-data,
+.password {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.error-box{
+  max-width: 20rem;
+}
+
+.error-box small{
+  display: flex;
+  justify-content: center;
+  color: rgb(193, 53, 53);
+  text-align: center;
+  text-decoration: solid;
+}
+
+.invalid-field{
+  border-color: red !important;
+}
+
+.icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}

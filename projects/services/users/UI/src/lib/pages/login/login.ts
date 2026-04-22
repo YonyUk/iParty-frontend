@@ -1,9 +1,158 @@
-import { Component } from '@angular/core';
+import { bootstrapPerson } from '@ng-icons/bootstrap-icons';
+import { ValidationProblemDetailsError } from 'common';
+import { UserNotFoundError } from 'users-domain';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  provideIUsersDomainRulesConfigProvider,
+  provideLoginUserCommandHandler,
+  USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN,
+} from 'users-infrastructure';
+import { LoginUserCommand, LoginUserCommandHandler } from 'users-application';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'lib-login',
-  imports: [],
+  imports: [ReactiveFormsModule, NgIconComponent],
   templateUrl: './login.html',
   styleUrl: './login.css',
+  providers: [
+    provideIcons({ bootstrapPerson }),
+    provideLoginUserCommandHandler(),
+    provideIUsersDomainRulesConfigProvider(),
+  ],
 })
-export class Login {}
+export class Login {
+  private readonly fb = inject(FormBuilder);
+  private readonly config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
+  private readonly authenticator = inject(LoginUserCommandHandler);
+  private readonly router = inject(Router);
+
+  constructor(
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly location: Location
+  ) {}
+
+  error: boolean = false;
+  errorMessage: string = '';
+
+  validationErrorMessage?: string;
+
+  usernameError = false;
+  passwordError = false;
+
+  form = this.fb.nonNullable.group({
+    username: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(this.config.UserNameDomainRules.minLength),
+        Validators.maxLength(this.config.UserNameDomainRules.maxLenght),
+      ],
+    ],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(this.config.PasswordDomainRules.minLength),
+        Validators.maxLength(this.config.PasswordDomainRules.maxLength),
+      ],
+    ],
+  });
+
+  private resetValidationVariables() {
+    this.error = false;
+    this.errorMessage = '';
+
+    this.validationErrorMessage = undefined;
+    this.usernameError = false;
+    this.passwordError = false;
+  }
+
+  private processResponseError(error: any) {
+    if (error instanceof UserNotFoundError) {
+      this.error = true;
+      this.errorMessage = (error as UserNotFoundError).message;
+      this.changeDetector.detectChanges();
+      return;
+    }
+    if (error instanceof ValidationProblemDetailsError) {
+      this.error = true;
+      this.errorMessage = (error as ValidationProblemDetailsError).message;
+      const errors = (error as ValidationProblemDetailsError).Errors;
+      if ('data.UserName' in errors) {
+        this.errorMessage += ` ${errors['data.UserName'].join(';')}.`;
+      }
+      if ('data.Password' in errors) {
+        this.errorMessage += ` ${errors['data.Password'].join(';')}.`;
+      }
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  private processValidationError() {
+    if (this.form.get('username')?.errors?.['required']) {
+      this.usernameError = true;
+    }
+    if (this.form.get('password')?.errors?.['required']) {
+      this.passwordError = true;
+    }
+
+    if (
+      this.form.get('username')?.errors?.['minlength'] ||
+      this.form.get('username')?.errors?.['maxlength']
+    ) {
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.usernameError = true;
+      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomainRules.minLength} and ${this.config.UserNameDomainRules.maxLenght}. `;
+    }
+    if (
+      this.form.get('password')?.errors?.['minlength'] ||
+      this.form.get('password')?.errors?.['maxlength']
+    ) {
+      if (!this.validationErrorMessage) this.validationErrorMessage = '';
+      this.passwordError = true;
+      this.validationErrorMessage += `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}. `;
+    }
+
+    if (!this.validationErrorMessage && (this.usernameError || this.passwordError)) {
+      this.validationErrorMessage = 'Please, fill all the required values';
+    }
+  }
+
+  async onSubmit(): Promise<void> {
+    this.resetValidationVariables();
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.processValidationError();
+      this.changeDetector.detectChanges();
+      return;
+    }
+
+    const formValue = this.form.getRawValue();
+    const command: LoginUserCommand = {
+      data: {
+        username: formValue.username,
+        password: formValue.password,
+      },
+    };
+
+    try {
+      const response = await this.authenticator.handle(command);
+      if (!response.logged) {
+        this.error = true;
+        this.errorMessage = 'Incorrect username or password';
+        this.changeDetector.detectChanges();
+      }
+    } catch (error) {
+      this.processResponseError(error);
+    }
+  }
+
+  cancel() {
+    this.location.back();
+  }
+}

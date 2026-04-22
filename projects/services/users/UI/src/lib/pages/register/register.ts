@@ -26,10 +26,10 @@ import { ValidationProblemDetailsError } from 'common';
   ],
 })
 export class Register {
-  private fb = inject(FormBuilder);
-  private register = inject(RegisterUserCommandHandler);
-  private config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly register = inject(RegisterUserCommandHandler);
+  private readonly config = inject(USERS_DOMAIN_RULES_CONFIG_PROVIDER_TOKEN);
+  private readonly router = inject(Router);
 
   accountType: UserRole = UserRole.User;
   error: boolean = false;
@@ -40,7 +40,6 @@ export class Register {
   passwordError = false;
 
   validationErrorMessage?: string;
-  validationErrors = false;
 
   constructor(
     private readonly location: Location,
@@ -53,8 +52,8 @@ export class Register {
         '',
         [
           Validators.required,
-          Validators.minLength(this.config.UserNameDomaiRules.minLength),
-          Validators.maxLength(this.config.UserNameDomaiRules.maxLenght),
+          Validators.minLength(this.config.UserNameDomainRules.minLength),
+          Validators.maxLength(this.config.UserNameDomainRules.maxLenght),
         ],
       ],
       email: ['', [Validators.required, Validators.email]],
@@ -83,7 +82,6 @@ export class Register {
     this.passwordError = false;
 
     this.validationErrorMessage = undefined;
-    this.validationErrors = false;
   }
 
   private processValidationError() {
@@ -103,13 +101,11 @@ export class Register {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.usernameError = true;
-      this.validationErrors = true;
-      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomaiRules.minLength} and ${this.config.UserNameDomaiRules.maxLenght}. `;
+      this.validationErrorMessage += `username length must be between ${this.config.UserNameDomainRules.minLength} and ${this.config.UserNameDomainRules.maxLenght}. `;
     }
     if (this.form.get('email')?.errors?.['email']) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.emailError = true;
-      this.validationErrors = true;
       this.validationErrorMessage += `Invalid email format. `;
     }
     if (
@@ -118,7 +114,6 @@ export class Register {
     ) {
       if (!this.validationErrorMessage) this.validationErrorMessage = '';
       this.passwordError = true;
-      this.validationErrors = true;
       this.validationErrorMessage += `password length must be between ${this.config.PasswordDomainRules.minLength} and ${this.config.PasswordDomainRules.maxLength}. `;
     }
 

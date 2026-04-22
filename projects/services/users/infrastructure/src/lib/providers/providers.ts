@@ -1,14 +1,14 @@
 import { Provider } from "@angular/core";
-import { provideIUserRepository } from "./repositories/users-repository-provider";
 import { provideIUsersDomainRulesConfigProvider } from "./config/users-domain-rules-config-provider";
-import { provideRegisterUserCommandHandler } from "./handlers/register-user-command-handler-provider";
-import { provideRegisterUserCommandValidator } from "./validators/register-user-command-validator-provider";
+import { provideRepositories } from "./repositories/provider";
+import { provideHandlers } from "./handlers/provider";
+import { provideValidators } from "./validators/provider";
 
 export function provideUsersInfrastructure():Provider[]{
     return[
-        provideIUserRepository(),
+        ...provideRepositories(),
         provideIUsersDomainRulesConfigProvider(),
-        provideRegisterUserCommandValidator(),
-        provideRegisterUserCommandHandler()
+        ...provideHandlers(),
+        ...provideValidators()
     ]
 }

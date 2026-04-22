@@ -109,7 +109,6 @@
           }
         }
       }
-<<<<<<< HEAD
     },
     "users-ui": {
       "projectType": "library",
@@ -202,8 +201,6 @@
           "builder": "@angular/build:unit-test"
         }
       }
-=======
->>>>>>> dev-users-infrastructure
     }
   }
 }

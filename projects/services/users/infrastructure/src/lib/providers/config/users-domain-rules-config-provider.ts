@@ -12,11 +12,11 @@ export class UsersDomainRulesConfigProvider implements IUsersDomainRulesConfigPr
         this.usernameRules = new UserNameDomainRules(options.usernameMinLength, options.usernameMaxLength);
         this.passwordRules = new PasswordDomainRules(options.passwordMinLength, options.passwordMaxLength);
     }
-    
-    get UserNameDomaiRules(): UserNameDomainRules {
+
+    get UserNameDomainRules(): UserNameDomainRules {
         return this.usernameRules;
     }
-    
+
     get PasswordDomainRules(): PasswordDomainRules {
         return this.passwordRules;
     }
