@@ -14,7 +14,7 @@ export class HttpErrorMapper implements IHttpErrorMapper {
   }
 
   addMapping(statusCode: number, mapper: (error: HttpErrorResponse) => Error): void {
-    this.statusCodes.push(statusCode);
+    if (!this.statusCodes.includes(statusCode)) this.statusCodes.push(statusCode);
     this.mappers[statusCode] = mapper;
   }
 }
