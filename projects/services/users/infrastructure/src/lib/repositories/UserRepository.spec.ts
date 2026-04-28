@@ -1,25 +1,22 @@
 import {
   API_HOST_TOKEN,
-  IProblemDetailsDTO,
-  IValidationProblemDetailsDTO,
-  ValidationProblemDetailsError,
+  IProblemDetailsDTO
 } from 'common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { mock } from 'vitest-mock-extended';
-import { USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN, USER_REPOSITORY_TOKEN } from '../tokens';
+import { USER_REPOSITORY_TOKEN } from '../tokens';
 import { provideIUserRepository } from '../providers/repositories/users-repository-provider';
 import { UserRepository } from './UserRepository';
 import { of, throwError } from 'rxjs';
 import {
   Password,
   PasswordDomainRules,
-  UserAlreadyExistsError,
   UserName,
   UserNameDomainRules,
   UserNotFoundError,
 } from 'users-domain';
-import { HttpErrorMapper } from '../services/HttpErrorMapper/HttpErrorMapper';
+import { provideUserRepositoryHttpErrorMapper } from '../providers/services/user-repository-http-error-mapper-provider';
 
 enum LoginExpectedResult {
   Ok,
@@ -32,22 +29,6 @@ describe('UserRepository tests', () => {
   const passwordRules = new PasswordDomainRules(6, 10);
 
   const mockedHttpClient = mock<HttpClient>();
-  const mapper = new HttpErrorMapper();
-
-  mapper.addMapping(409, (error) => {
-    const conflictError = error.error as IProblemDetailsDTO;
-    return new UserAlreadyExistsError(conflictError.detail);
-  });
-
-  mapper.addMapping(400, (error) => {
-    const validationError = error.error as IValidationProblemDetailsDTO;
-    return new ValidationProblemDetailsError(validationError);
-  });
-
-  mapper.addMapping(404, (error) => {
-    const notFoundError = error.error as IProblemDetailsDTO;
-    return new UserNotFoundError(notFoundError.detail);
-  });
 
   const apiHost = 'http://api.test';
 
@@ -61,14 +42,11 @@ describe('UserRepository tests', () => {
           useValue: apiHost,
         },
         {
-          provide: USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN,
-          useValue: mapper,
-        },
-        {
           provide: HttpClient,
           useValue: mockedHttpClient,
         },
         provideIUserRepository(),
+        provideUserRepositoryHttpErrorMapper()
       ],
     });
   });
