@@ -1,5 +1,5 @@
 import { UserAlreadyExistsError, UserNotFoundError } from 'users-domain';
-import { IProblemDetailsDTO, IValidationProblemDetailsDTO, ValidationProblemDetailsError } from 'common';
+import { IProblemDetailsDTO, IValidationProblemDetailsDTO, NotAuthorizedError, ValidationProblemDetailsError } from 'common';
 import { Provider } from "@angular/core";
 import { USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN } from "../../tokens";
 import { HttpErrorMapper } from "../../services/HttpErrorMapper/HttpErrorMapper";
@@ -24,6 +24,10 @@ export function provideUserRepositoryHttpErrorMapper():Provider{
       mapper.addMapping(404,(error) => {
         const notFoundError = error.error as IProblemDetailsDTO;
         return new UserNotFoundError(notFoundError.detail);
+      });
+
+      mapper.addMapping(401,(error) => {
+        return new NotAuthorizedError("User not authenticated");
       });
 
       return mapper;
