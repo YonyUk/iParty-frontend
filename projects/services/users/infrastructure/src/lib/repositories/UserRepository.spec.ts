@@ -1,3 +1,4 @@
+import { RegisterUserResponseDTO } from 'users-application';
 import {
   API_HOST_TOKEN,
   IProblemDetailsDTO
@@ -10,11 +11,14 @@ import { provideIUserRepository } from '../providers/repositories/users-reposito
 import { UserRepository } from './UserRepository';
 import { of, throwError } from 'rxjs';
 import {
+  Email,
   Password,
   PasswordDomainRules,
+  UserAlreadyExistsError,
   UserName,
   UserNameDomainRules,
   UserNotFoundError,
+  UserRole,
 } from 'users-domain';
 import { provideUserRepositoryHttpErrorMapper } from '../providers/services/user-repository-http-error-mapper-provider';
 
@@ -105,7 +109,70 @@ describe('UserRepository tests', () => {
         expect(result).toBe(expected === LoginExpectedResult.Ok ? true : false);
       } else {
         expect(act).rejects.toThrow(UserNotFoundError);
+        expect(mockedHttpClient.post).toHaveBeenCalledExactlyOnceWith(
+          `${apiHost}/users/login`,
+          expect.any(FormData),
+          { withCredentials: true },
+        )
       }
     },
   );
+
+  it.each([
+    [UserRole.User,false],
+    [UserRole.User,true],
+    [UserRole.Host,true],
+    [UserRole.Host,false]
+  ])("should handle register user",async (role:UserRole,userExists:boolean) => {
+
+    if (userExists){
+      const error:IProblemDetailsDTO = {
+        detail:"User already exists",
+        status:409,
+        title:"Conflict",
+        instance:""
+      };
+
+      mockedHttpClient.post.mockReturnValue(
+        throwError(() => new HttpErrorResponse({
+          status:409,
+          error
+        }))
+      );
+    } else{
+      mockedHttpClient.post.mockReturnValue(of<RegisterUserResponseDTO>({
+        id:"id"
+      }));
+    }
+
+    const username = new UserName("yonyuk",usernameRules);
+    const password = new Password("qwerty1234",passwordRules);
+    const email = new Email("test@example.com");
+
+    const repository = TestBed.inject(USER_REPOSITORY_TOKEN);
+
+    const act = async () => await repository.register({
+      username,
+      password,
+      email,
+      role
+    });
+
+    if (userExists){
+      expect(act).rejects.toThrow(UserAlreadyExistsError);
+      expect(mockedHttpClient.post).toHaveBeenCalledExactlyOnceWith(
+        `${apiHost}/users/register`,
+          expect.any(FormData)
+      );
+    } else{
+      expect(act).not.toThrow();
+      expect(mockedHttpClient.post).toHaveBeenCalledExactlyOnceWith(
+        `${apiHost}/users/register`,
+          expect.any(FormData)
+      );
+      const response = await act();
+      expect(response).toBe("id");
+    }
+  });
+
 });
