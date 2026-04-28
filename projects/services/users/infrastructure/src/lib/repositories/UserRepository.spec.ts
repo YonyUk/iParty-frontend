@@ -1,5 +1,3 @@
-import { LoginResponseDTO } from 'users-application';
-import { IHttpErrorMapper } from './../services/HttpErrorMapper/IHttpErrorMapper';
 import {
   API_HOST_TOKEN,
   IProblemDetailsDTO,
@@ -12,7 +10,7 @@ import { mock } from 'vitest-mock-extended';
 import { USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN, USER_REPOSITORY_TOKEN } from '../tokens';
 import { provideIUserRepository } from '../providers/repositories/users-repository-provider';
 import { UserRepository } from './UserRepository';
-import { Observable, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import {
   Password,
   PasswordDomainRules,
@@ -21,6 +19,7 @@ import {
   UserNameDomainRules,
   UserNotFoundError,
 } from 'users-domain';
+import { HttpErrorMapper } from '../services/HttpErrorMapper/HttpErrorMapper';
 
 enum LoginExpectedResult {
   Ok,
@@ -33,16 +32,21 @@ describe('UserRepository tests', () => {
   const passwordRules = new PasswordDomainRules(6, 10);
 
   const mockedHttpClient = mock<HttpClient>();
-  const mockedHttpErrorMapper = mock<IHttpErrorMapper>();
+  const mapper = new HttpErrorMapper();
 
-  mockedHttpErrorMapper.addMapping(409, (error) => {
+  mapper.addMapping(409, (error) => {
     const conflictError = error.error as IProblemDetailsDTO;
     return new UserAlreadyExistsError(conflictError.detail);
   });
 
-  mockedHttpErrorMapper.addMapping(400, (error) => {
+  mapper.addMapping(400, (error) => {
     const validationError = error.error as IValidationProblemDetailsDTO;
     return new ValidationProblemDetailsError(validationError);
+  });
+
+  mapper.addMapping(404, (error) => {
+    const notFoundError = error.error as IProblemDetailsDTO;
+    return new UserNotFoundError(notFoundError.detail);
   });
 
   const apiHost = 'http://api.test';
@@ -58,7 +62,7 @@ describe('UserRepository tests', () => {
         },
         {
           provide: USER_REPOSITORY_HTTP_ERROR_MAPPER_TOKEN,
-          useValue: mockedHttpErrorMapper,
+          useValue: mapper,
         },
         {
           provide: HttpClient,
@@ -74,25 +78,32 @@ describe('UserRepository tests', () => {
     expect(repository).toBeInstanceOf(UserRepository);
   });
 
-  it.each([['yonyuk', 'qwerty1234', LoginExpectedResult.Ok]])(
+  it.each([
+    ['yonyuk', 'qwerty1234', LoginExpectedResult.Ok],
+    ['yonyuk', 'qwerty1234', LoginExpectedResult.IncorrectPassword],
+    ['yonyuk', 'qwerty1234', LoginExpectedResult.UserNotFound],
+  ])(
     'should handle login functionality',
     async (username: string, password: string, expected: LoginExpectedResult) => {
       const _username = new UserName(username, usernameRules);
       const _password = new Password(password, passwordRules);
 
-      mockedHttpErrorMapper.addMapping(404, (error) => {
-        const notFoundError = error.error as IProblemDetailsDTO;
-        return new UserNotFoundError(notFoundError.detail);
-      });
-
       if (expected === LoginExpectedResult.Ok) {
         mockedHttpClient.post.mockReturnValue(of({}));
       } else {
+        const error: IProblemDetailsDTO = {
+          detail:"User not found",
+          instance:"",
+          status:404,
+          title:"not found"
+        };
+
         mockedHttpClient.post.mockReturnValue(
           throwError(
             () =>
               new HttpErrorResponse({
                 status: expected === LoginExpectedResult.IncorrectPassword ? 401 : 404,
+                error
               }),
           ),
         );
