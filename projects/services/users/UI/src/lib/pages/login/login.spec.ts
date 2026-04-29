@@ -13,7 +13,6 @@ import { Login } from './login';
 import { mock } from 'vitest-mock-extended';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapHouse, bootstrapPerson } from '@ng-icons/bootstrap-icons';
@@ -26,7 +25,6 @@ describe('Login', () => {
   const mockedHandler = mock<LoginUserCommandHandler>();
   const mockedRouter = mock<Router>();
   const mockedLoaction = mock<Location>();
-  const mockedChangeDetectorRef = mock<ChangeDetectorRef>();
 
   const mockedConfig: IUsersDomainRulesConfigProvider = {
     UserNameDomainRules: new UserNameDomainRules(6, 10),
