@@ -258,4 +258,9 @@ describe('Login', () => {
     if (passwordError) expect(component.errorMessage).toContain("Invalid password");
   });
 
+  it("should call location.back() on cancel",() => {
+    component.cancel();
+    expect(mockedLoaction.back).toHaveBeenCalledOnce();
+  });
+
 });
