@@ -17,7 +17,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapHouse, bootstrapPerson } from '@ng-icons/bootstrap-icons';
-import { IValidationProblemDetailsDTO, ValidationProblemDetailsError } from "common";
+import { IValidationProblemDetailsDTO, ValidationProblemDetailsError } from 'common';
 
 describe('Login', () => {
   let component: Login;
@@ -211,14 +211,14 @@ describe('Login', () => {
     expect(component.errorMessage).toBe('Incorrect username or password');
   });
 
-  it("should handle UserNotFoundError", async () => {
-    const changeDetectorRefSpy = vi.spyOn((component as any).changeDetector,"detectChanges");
+  it('should handle UserNotFoundError', async () => {
+    const changeDetectorRefSpy = vi.spyOn((component as any).changeDetector, 'detectChanges');
 
-    const error = new UserNotFoundError("User not found");
+    const error = new UserNotFoundError('User not found');
     mockedHandler.handle.mockRejectedValue(error);
     component.form.setValue({
-      username:"yonyuk",
-      password:"qwerty1234"
+      username: 'yonyuk',
+      password: 'qwerty1234',
     });
     await component.onSubmit();
     expect(component.error).toBe(true);
@@ -227,40 +227,58 @@ describe('Login', () => {
   });
 
   it.each([
-    [true,false],
-    [false,true],
-    [true,true]
-  ])
-  ("should handle ValidationProblemDetailsError with error on username %s and error on password %s", async (
-    usernameError:boolean,
-    passwordError:boolean
-  ) => {
-    const details:Record<string,string[]> = {};
-    if (usernameError) details["data.UserName"] = ['Invalid username'];
-    if (passwordError) details["data.Password"] = ['Invalid password'];
+    [true, false],
+    [false, true],
+    [true, true],
+  ])(
+    'should handle ValidationProblemDetailsError with error on username %s and error on password %s',
+    async (usernameError: boolean, passwordError: boolean) => {
+      const details: Record<string, string[]> = {};
+      if (usernameError) details['data.UserName'] = ['Invalid username'];
+      if (passwordError) details['data.Password'] = ['Invalid password'];
 
-    const problemDetails:IValidationProblemDetailsDTO = {
-      title:"Validation errors",
-      errors: details
-    };
+      const problemDetails: IValidationProblemDetailsDTO = {
+        title: 'Validation errors',
+        errors: details,
+      };
 
-    const error = new ValidationProblemDetailsError(problemDetails);
+      const error = new ValidationProblemDetailsError(problemDetails);
 
-    mockedHandler.handle.mockRejectedValue(error);
-    component.form.controls.username.setValue("yonyuk");
-    component.form.controls.password.setValue("qwerty1234");
+      mockedHandler.handle.mockRejectedValue(error);
+      component.form.controls.username.setValue('yonyuk');
+      component.form.controls.password.setValue('qwerty1234');
 
-    await component.onSubmit();
+      await component.onSubmit();
 
-    expect(component.error).toBe(true);
-    expect(component.errorMessage).toContain(error.message);
-    if (usernameError) expect(component.errorMessage).toContain("Invalid username");
-    if (passwordError) expect(component.errorMessage).toContain("Invalid password");
-  });
+      expect(component.error).toBe(true);
+      expect(component.errorMessage).toContain(error.message);
+      if (usernameError) expect(component.errorMessage).toContain('Invalid username');
+      if (passwordError) expect(component.errorMessage).toContain('Invalid password');
+    },
+  );
 
-  it("should call location.back() on cancel",() => {
+  it('should call location.back() on cancel', () => {
     component.cancel();
     expect(mockedLoaction.back).toHaveBeenCalledOnce();
   });
 
+  it('should reset validation variables on submit', async () => {
+    component.error = true;
+    component.errorMessage = 'Validation errors';
+    component.validationErrorMessage = 'Validation errors';
+    component.usernameError = true;
+    component.passwordError = true;
+
+    component.form.controls.username.setValue('yonyuk');
+    component.form.controls.password.setValue('qwerty1234');
+    mockedHandler.handle.mockResolvedValue({ logged: true });
+
+    await component.onSubmit();
+
+    expect(component.error).toBe(false);
+    expect(component.errorMessage).toBe('');
+    expect(component.validationErrorMessage).toBeUndefined();
+    expect(component.usernameError).toBe(false);
+    expect(component.passwordError).toBe(false);
+  });
 });
