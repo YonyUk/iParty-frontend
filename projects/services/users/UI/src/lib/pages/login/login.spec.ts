@@ -17,7 +17,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapHouse, bootstrapPerson } from '@ng-icons/bootstrap-icons';
-import { repeat } from 'rxjs';
+import { IValidationProblemDetailsDTO, ValidationProblemDetailsError } from "common";
 
 describe('Login', () => {
   let component: Login;
@@ -226,5 +226,36 @@ describe('Login', () => {
     expect(changeDetectorRefSpy).toHaveBeenCalledOnce();
   });
 
+  it.each([
+    [true,false],
+    [false,true],
+    [true,true]
+  ])
+  ("should handle ValidationProblemDetailsError with error on username %s and error on password %s", async (
+    usernameError:boolean,
+    passwordError:boolean
+  ) => {
+    const details:Record<string,string[]> = {};
+    if (usernameError) details["data.UserName"] = ['Invalid username'];
+    if (passwordError) details["data.Password"] = ['Invalid password'];
+
+    const problemDetails:IValidationProblemDetailsDTO = {
+      title:"Validation errors",
+      errors: details
+    };
+
+    const error = new ValidationProblemDetailsError(problemDetails);
+
+    mockedHandler.handle.mockRejectedValue(error);
+    component.form.controls.username.setValue("yonyuk");
+    component.form.controls.password.setValue("qwerty1234");
+
+    await component.onSubmit();
+
+    expect(component.error).toBe(true);
+    expect(component.errorMessage).toContain(error.message);
+    if (usernameError) expect(component.errorMessage).toContain("Invalid username");
+    if (passwordError) expect(component.errorMessage).toContain("Invalid password");
+  });
 
 });
